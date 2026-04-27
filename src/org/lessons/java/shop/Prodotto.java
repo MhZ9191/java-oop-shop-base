@@ -5,12 +5,23 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 public class Prodotto {
-    public int code;
-    public String name;
-    public String description;
-    public BigDecimal price;
-    public BigDecimal iva;
+    private int code;
+    private String name;
+    private String description;
+    private BigDecimal price;
+    private BigDecimal iva;
 
+    //COSTRUTTORE SENZA PARAMETRI
+    public Prodotto(){
+        Random rnd = new Random();
+        this.code=rnd.nextInt(99999);
+        this.name="unnamed";
+        this.description="undescription";
+        this.price=new BigDecimal(0);
+        this.iva=new BigDecimal(22);
+    }
+
+    //COSTRUTTORE CON IVA COME PARAMETRO
     public Prodotto(String name,String description,BigDecimal price,BigDecimal iva){
         Random rnd = new Random();
         this.code=rnd.nextInt(99999);
@@ -19,22 +30,59 @@ public class Prodotto {
         this.price=price;
         this.iva=iva;    
     }
-
-    public BigDecimal getPriceBase(){
-        return this.price;
+    //COSTRUTTORE CON IVA DI DEFAULT 22
+    public Prodotto(String name,String description,BigDecimal price){
+         Random rnd = new Random();
+        this.code=rnd.nextInt(99999);
+        this.name=name;
+        this.description=description;
+        this.price=price;
+        this.iva=new BigDecimal(22);
     }
 
-    public BigDecimal getPricePlusIva(){
-        if(price!=null && iva !=null){
-            return price.add(price.multiply(iva).divide(new BigDecimal(100))).setScale(2,RoundingMode.DOWN);
+    //GETTER & SETTER
+    public int getCode(){
+        return this.code;
+    }
+    public String getName(){
+        return this.name;
+    }
+    public void setName(String name){
+        if(name!=null && name.trim()!=""){
+            this.name=name;
         }
-        return null;
+    }
+    public String getDescription(){
+            return this.description;
+    }
+    public void setDescription(String description){
+        if(description!=null&&description.trim()!=""){
+            this.description=description;
+        }
+    }
+    public BigDecimal getPrice(){
+        return this.price.setScale(2,RoundingMode.DOWN);
+    }
+    public void setPrice(BigDecimal price){
+        if(price!=null&&price.compareTo(BigDecimal.ZERO)>=0){
+            this.price=price.setScale(2,RoundingMode.DOWN);
+        }
+    }
+    public BigDecimal getIva(){
+        return this.iva;
+    }
+    public void setIva(BigDecimal iva){
+        if(iva!=null&&iva.compareTo(BigDecimal.ZERO)>=0){
+            this.iva=iva;
+        }    
+    }
+
+
+    public BigDecimal getPricePlusIva(){
+            return price.add(price.multiply(iva).divide(new BigDecimal(100))).setScale(2,RoundingMode.DOWN);
     }
 
     public String extendedName(){
-        if(name!=null){
             return this.code+" - "+this.name;
-        }
-        return null;
     }
 }
